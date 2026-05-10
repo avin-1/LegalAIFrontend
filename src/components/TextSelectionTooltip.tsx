@@ -3,6 +3,7 @@ import { createPortal } from 'react-dom'
 import { motion, AnimatePresence } from 'framer-motion'
 import { Sparkles, X, Loader2 } from 'lucide-react'
 import ReactMarkdown from 'react-markdown'
+import remarkGfm from 'remark-gfm'
 import { toast } from 'sonner'
 
 interface TextSelectionTooltipProps {
@@ -264,7 +265,63 @@ export default function TextSelectionTooltip({ token }: TextSelectionTooltipProp
                     color: 'rgba(255,255,255,0.88)',
                     fontFamily: 'Outfit, sans-serif'
                   }}>
-                    <ReactMarkdown>{explanation}</ReactMarkdown>
+                    <ReactMarkdown
+                      remarkPlugins={[remarkGfm]}
+                      components={{
+                        table: ({ children }) => (
+                          <div style={{ overflowX: 'auto', marginTop: '12px', marginBottom: '12px' }}>
+                            <table style={{
+                              width: '100%', borderCollapse: 'collapse',
+                              fontSize: '13px', lineHeight: 1.5
+                            }}>{children}</table>
+                          </div>
+                        ),
+                        th: ({ children }) => (
+                          <th style={{
+                            padding: '8px 12px', textAlign: 'left',
+                            background: 'rgba(167,139,250,0.15)',
+                            borderBottom: '1px solid rgba(167,139,250,0.3)',
+                            color: '#a78bfa', fontWeight: 600, whiteSpace: 'nowrap'
+                          }}>{children}</th>
+                        ),
+                        td: ({ children }) => (
+                          <td style={{
+                            padding: '8px 12px',
+                            borderBottom: '1px solid rgba(255,255,255,0.06)',
+                            color: 'rgba(255,255,255,0.8)'
+                          }}>{children}</td>
+                        ),
+                        tr: ({ children }) => (
+                          <tr style={{ transition: 'background 0.15s' }}>{children}</tr>
+                        ),
+                        strong: ({ children }) => (
+                          <strong style={{ color: '#fff', fontWeight: 700 }}>{children}</strong>
+                        ),
+                        p: ({ children }) => (
+                          <p style={{ marginBottom: '10px', marginTop: 0 }}>{children}</p>
+                        ),
+                        li: ({ children }) => (
+                          <li style={{ marginBottom: '6px' }}>{children}</li>
+                        ),
+                        ul: ({ children }) => (
+                          <ul style={{ paddingLeft: '20px', marginBottom: '10px' }}>{children}</ul>
+                        ),
+                        ol: ({ children }) => (
+                          <ol style={{ paddingLeft: '20px', marginBottom: '10px' }}>{children}</ol>
+                        ),
+                        h1: ({ children }) => (
+                          <h1 style={{ fontSize: '18px', fontWeight: 700, color: '#fff', marginBottom: '8px', marginTop: '16px' }}>{children}</h1>
+                        ),
+                        h2: ({ children }) => (
+                          <h2 style={{ fontSize: '16px', fontWeight: 700, color: '#e5e5ff', marginBottom: '6px', marginTop: '14px' }}>{children}</h2>
+                        ),
+                        h3: ({ children }) => (
+                          <h3 style={{ fontSize: '14px', fontWeight: 600, color: '#c4b5fd', marginBottom: '4px', marginTop: '12px' }}>{children}</h3>
+                        ),
+                      }}
+                    >
+                      {explanation}
+                    </ReactMarkdown>
                   </div>
                 )}
               </div>
